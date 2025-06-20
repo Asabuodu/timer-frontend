@@ -54,7 +54,7 @@ export default function SavedPage() {
   };
 
   return (
-    <div className="p-6 min-h-screen bg-white text-gray-700">
+    <div className="p-6 min-h-screen bg-gradient-to-r from-white via-blue-100 to-white text-gray-700">
       <Navbar />
       <div className="p-8">
         <h1 className="text-2xl font-bold text-center mb-10">Saved Schedules</h1>

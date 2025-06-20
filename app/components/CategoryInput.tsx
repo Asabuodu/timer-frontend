@@ -1,17 +1,16 @@
+// app/components/CategoryInput.tsx
+
 import { motion } from "framer-motion";
 import TimeInput from "./TimeInput";
-import type { Time } from "./types";
+import type { Time, Category } from "../lib/types";
+
 
 type Props = {
   index: number;
-  data: {
-    id: number;
-    name: string;
-    duration: Time;
-  };
-  onNameChange: (id: number, name: string) => void;
-  onTimeChange: (id: number, time: Time) => void;
-  onRemove: (id: number) => void;
+  data: Category;
+  onNameChange: (id: string, name: string) => void;
+  onTimeChange: (id: string, time: Time) => void;
+  onRemove: (id: string) => void;
 };
 
 const CategoryInput = ({
@@ -28,9 +27,8 @@ const CategoryInput = ({
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: 50 }}
       transition={{ duration: 0.4 }}
-      className="mb-6 p-7 border-b border-gray-300 hover:border-gray relative rounded-lg bg-transparent "
+      className="mb-6 p-7 border-b border-gray-300 hover:border-gray relative rounded-lg bg-transparent"
     >
-      {/* Remove Button */}
       <button
         onClick={() => onRemove(data.id)}
         className="absolute top-3 right-3 text-gray-600 font-bold text-2xl hover:text-gray-800"
@@ -46,7 +44,7 @@ const CategoryInput = ({
           placeholder="Category name max 40 characters"
           value={data.name}
           onChange={(e) => onNameChange(data.id, e.target.value)}
-          className="w-80 p-2 mb-3 border rounded-md text-gray-700"
+          className="w-96 p-2 mb-3 border rounded-md text-gray-700"
         />
         <div className="flex items-center gap-4">
           <TimeInput

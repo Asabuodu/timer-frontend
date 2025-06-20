@@ -21,7 +21,10 @@ export default function SigninPage() {
     setLoading(true);
 
     try {
-      const response = await api.post("/auth/login", { email, password });
+      const response = await api.post("/auth/login", { 
+        email, 
+        password 
+      });
       const { token, user } = response.data;
 
       // ✅ Update Zustand store

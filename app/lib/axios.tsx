@@ -8,18 +8,31 @@ const axiosInstance = axios.create({
   },
 });
 
-// Add auth token from cookies (if needed)
-axiosInstance.interceptors.request.use((config) => {
-  const token = document.cookie
-    .split("; ")
-    .find((row) => row.startsWith("authToken="))
-    ?.split("=")[1];
+if (typeof window !== "undefined") {
+  axiosInstance.interceptors.request.use((config) => {
+    const token = document.cookie
+      .split("; ")
+      .find((row) => row.startsWith("authToken="))
+      ?.split("=")[1];
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
 
-  return config;
-});
+    return config;
+  });
+}
 
 export default axiosInstance;
+
+
+
+// lib/axios.ts
+// import axios from "axios";
+
+// const instance = axios.create({
+//   baseURL: "http://localhost:5000/api",
+//   withCredentials: true, // only if using cookie-based auth
+// });
+
+// export default instance;
