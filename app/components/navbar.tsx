@@ -57,9 +57,9 @@ const Navbar = () => {
 
   const renderAuthButton = () =>
     user ? (
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-6">
         <span className="text-sm font-medium text-black hidden md:inline">
-          Hello, {user.username || user.email}
+           {user.username || user.email}
         </span>
         <button
           onClick={handleLogout}
