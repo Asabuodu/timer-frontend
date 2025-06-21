@@ -8,13 +8,12 @@ import TimeInput from "@/app/components/TimeInput";
 import OngoingSchedule from "@/app/components/OngoingSchedule";
 import { useRouter } from "next/navigation";
 import Navbar from "@/app/components/navbar";
-import Link from "next/link";
+import api from "@/app/lib/axios"; // ✅ Use custom Axios instance
 
 const EditSchedule = () => {
   const router = useRouter();
   const {
     editingSchedule,
-    saveSchedule,
     setCategories: updateZustandCategories,
     clearEditingSchedule,
   } = useScheduleStore();
@@ -67,18 +66,35 @@ const EditSchedule = () => {
       return;
     }
 
-    const updated = {
-      id: editingSchedule?.id ?? Date.now(),
-      title,
-      duration,
-      categories,
-      createdAt: editingSchedule?.createdAt ?? new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      alert("You must be logged in to save changes.");
+      return;
+    }
 
-    await saveSchedule(updated);
-    clearEditingSchedule();
-    router.push("/saved");
+    if (!editingSchedule?._id) {
+      alert("Schedule ID is missing.");
+      return;
+    }
+
+    try {
+      await api.put(
+        `/schedules/${editingSchedule._id}`,
+        { title, duration, categories },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      alert("✅ Schedule updated successfully.");
+      clearEditingSchedule();
+      router.push("/saved");
+    } catch (error) {
+      console.error("❌ Failed to update schedule:", error);
+      alert("Something went wrong while updating.");
+    }
   };
 
   return (
@@ -92,28 +108,27 @@ const EditSchedule = () => {
             Edit Your Schedule
           </h1>
 
-          <div className="max-w-4xl w-full mx-auto border-white border-8 mt-6 p-6 rounded-2xl shadow-lg bg-white bg-opacity-80">
+          <div className="max-w-4xl w-full mx-auto border-white text-gray-600 border-8 mt-6 p-6 rounded-2xl shadow-lg bg-transparent bg-opacity-80">
             <p className="font-semibold text-gray-800 text-center mb-6">
               Modify Your Time Schedule
             </p>
 
-            {/* Title + Duration input */}
-            <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-6">
-              <div className="flex flex-col w-full md:w-1/2">
+            <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-10">
+              <div className="flex flex-col w-full md:w-1/2 ml-2.5 mr-6">
                 <label className="text-gray-600 font-medium mb-1">
                   Purpose/Title of your timer
                 </label>
                 <input
                   type="text"
                   placeholder="Eg. Church programme..."
-                  className="w-full p-3 border rounded-lg mb-2 font-sans text-gray-600"
+                  className="w-full p-3 border rounded-lg  font-sans text-gray-600"
                   value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </div>
 
               <div className="flex flex-col w-full md:w-1/2">
-                <label className="mb-2 font-medium text-gray-600">
+                <label className="mb-3 font-medium text-gray-600">
                   State your duration
                 </label>
                 <div className="flex flex-wrap gap-4 items-center">
@@ -158,8 +173,6 @@ const EditSchedule = () => {
             </div>
 
             <div className="flex flex-col sm:flex-row justify-center gap-6 mt-8">
-              <Link href={`/ongoing/${schedule._id}`}>
-              
               <button
                 className="bg-black text-white px-6 py-2 rounded-full w-full sm:w-40"
                 onClick={() => {
@@ -169,7 +182,6 @@ const EditSchedule = () => {
               >
                 Start
               </button>
-              </Link>
 
               <button
                 className="border border-black px-6 py-2 rounded-full w-full sm:w-40 text-black"

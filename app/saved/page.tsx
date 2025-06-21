@@ -7,7 +7,6 @@ import Navbar from "../components/navbar";
 import ConfirmModal from "../components/ConfirmModal";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
 import { useScheduleStore } from "@/app/lib/scheduleStore";
-import Link from "next/link";
 
 export default function SavedPage() {
   const [schedules, setSchedules] = useState<any[]>([]);
@@ -17,37 +16,61 @@ export default function SavedPage() {
   const setEditingSchedule = useScheduleStore((state) => state.setEditingSchedule);
   const router = useRouter();
 
-  useEffect(() => {
-    const fetchSchedules = async () => {
-      try {
-        const res = await axios.get("/schedules");
-        setSchedules(res.data);
-      } catch (err) {
-        console.error("Error fetching schedules:", err);
-      }
-    };
 
-    fetchSchedules();
-  }, []);
+
+  useEffect(() => {
+  const fetchSchedules = async () => {
+    const token = localStorage.getItem("authToken"); // ✅ should match what you saved in SigninPage
+
+    if (!token) {
+      console.warn("⚠️ No token found. User not logged in.");
+      return;
+    }
+
+    try {
+      const res = await axios.get("/schedules", {
+        headers: {
+          Authorization: `Bearer ${token}`, // ✅ send token here
+        },
+      });
+      setSchedules(res.data);
+    } catch (err) {
+      console.error("Error fetching schedules:", err);
+    }
+  };
+
+  fetchSchedules();
+}, []);
+
 
   const openModal = (id: string) => {
     setSelectedScheduleId(id);
     setModalOpen(true);
   };
-
   const handleConfirmDelete = async () => {
-    if (!selectedScheduleId) return;
+  if (!selectedScheduleId) return;
 
-    try {
-      await axios.delete(`/schedules/${selectedScheduleId}`);
-      setSchedules((prev) => prev.filter((s) => s._id !== selectedScheduleId));
-    } catch (err) {
-      console.error("Error deleting schedule:", err);
-    }
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    alert("You must be logged in to delete a schedule.");
+    return;
+  }
 
-    setModalOpen(false);
-    setSelectedScheduleId(null);
-  };
+  try {
+    await axios.delete(`/schedules/${selectedScheduleId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setSchedules((prev) => prev.filter((s) => s._id !== selectedScheduleId));
+  } catch (err) {
+    console.error("Error deleting schedule:", err);
+  }
+
+  setModalOpen(false);
+  setSelectedScheduleId(null);
+};
+
 
   const toggleExpanded = (id: string) => {
     setExpandedScheduleId((prev) => (prev === id ? null : id));
@@ -93,35 +116,31 @@ export default function SavedPage() {
                         </div>
                       ))}
                       <div className="mt-4 flex gap-4">
-                        {/* <button
-                          onClick={() => {
-                            useScheduleStore.getState().setCategories(schedule.categories);
-                            router.push("/ongoing");
-                          }}
-                          className="bg-gray-500 text-white px-4 py-2 rounded-full"
-                        >
-                          Start
-                        </button> */}
+                  
 
+                        <button
+                  className="bg-gray-500 text-white px-8 py-2 rounded-full hover:bg-gray-600 hover:shadow-lg"
+                  onClick={() => {
+                    useScheduleStore.getState().setCategories(schedule.categories);
+                    router.push("/ongoing");
+                  }}
+                >
+                  Start
+                </button>
 
-                          <Link href={`/ongoing/${schedule._id}`}>
-                          <button className="bg-gray-500 text-white px-4 py-2 rounded-full">
-                            Start
-                          </button>
-                        </Link>
 
                         <button
                           onClick={() => {
                             setEditingSchedule(schedule);
                             router.push(`/edit/${schedule._id}`);
                           }}
-                          className="bg-blue-500 text-white px-4 py-2 rounded-full"
+                          className="bg-blue-500 text-white px-8 py-2 rounded-full hover:bg-blue-600 hover:shadow-lg"
                         >
                           Edit
                         </button>
                         <button
                           onClick={() => openModal(schedule._id)}
-                          className="bg-red-500 text-white px-4 py-2 rounded-full"
+                          className="bg-red-500 text-white px-6 py-2 rounded-full hover:bg-red-600 hover:shadow-lg"
                         >
                           Delete
                         </button>

@@ -99,7 +99,7 @@ const Navbar = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex gap-20 justify-around items-center">
+          <div className="hidden md:flex gap-10 justify-around items-center">
             {navItems.map(({ label, path }) => (
               <button
                 key={label}

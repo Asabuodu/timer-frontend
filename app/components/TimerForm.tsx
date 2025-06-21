@@ -64,20 +64,6 @@ const TimerForm = () => {
     );
   };
 
-  // const getTotalSeconds = (time: Time) =>
-  //   time.hours * 3600 + time.minutes * 60 + time.seconds;
-
-  // const sumCategorySeconds = categories.reduce(
-  //   (sum, cat) => sum + getTotalSeconds(cat.duration),
-  //   0
-  // );
-
-
-    // const titleSeconds = getTotalSeconds(duration);
-    // if (titleSeconds !== sumCategorySeconds) {
-    //   alert("Total duration must equal the sum of all category durations.");
-    //   return false;
-    // }
 
 
     const validateForm = () => {
@@ -97,59 +83,10 @@ const TimerForm = () => {
     return true;
   };
 
- 
-
-
-  // const handleSave = async () => {
-  //   if (!validateForm()) return;
-
-  //   const token = localStorage.getItem("token");
-
-  //   if (!token) {
-  //     alert("You must be logged in to save a schedule.");
-  //     return;
-  //   }
-
-  //   const schedule = {
-  //     title,
-  //     categories,
-  //     duration,
-  //     createdAt: new Date().toISOString(),
-  //   };
-
-  //   try {
-  //     const res = await axios.post("/schedules", schedule, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-
-  //     if (res.status === 201 || res.status === 200) {
-  //       alert("✅ Schedule saved successfully!");
-  //       router.push("/saved");
-  //     } else {
-  //       alert("⚠️ Failed to save schedule");
-  //     }
-  //   } catch (error) {
-  //     console.error("❌ Error saving schedule:", error);
-  //     alert("An error occurred while saving schedule.");
-  //   }
-  // };
-
-  // const handleStart = () => {
-  //   if (!validateForm()) return;
-
-  //   setStoreCategories(categories);
-  //   // setStarted(true);
-  //    router.push(`/ongoing/${res.data._id}`);
-
-  // };
 
 const handleSave = async () => {
   if (!validateForm()) return;
 
-  // const token = localStorage.getItem("token");
-    // const token = typeof window !== "undefined" ? localStorage.getItem("token") : null;
 
     const token = localStorage.getItem("authToken"); // ✅ Match the key from login
 
@@ -167,7 +104,8 @@ const handleSave = async () => {
     createdAt: new Date().toISOString(),
   };
 
- 
+
+
 
   try {
     const res = await axios.post("/schedules", schedule, {
@@ -186,6 +124,7 @@ const handleSave = async () => {
     console.error("❌ Error saving schedule:", error);
     alert("An error occurred while saving schedule.");
   }
+   console.log("Token being sent:", token);
 };
 
 
