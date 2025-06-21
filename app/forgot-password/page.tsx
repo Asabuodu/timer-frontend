@@ -1,7 +1,6 @@
 "use client";
 import { useState } from "react";
 import axios from "../lib/axios";
-import Navbar from "../components/navbar";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -20,9 +19,9 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-blue-50">
-      <Navbar />
-      <form onSubmit={handleSubmit} className="bg-white p-6 rounded shadow-md w-full max-w-md">
+    <div className="min-h-screen flex flex-col items-center justify-center  bg-gradient-to-r from-white via-blue-100 to-white">
+     
+      <form onSubmit={handleSubmit} className="bg-transparent text-gray-600 border-2 border-white p-6 rounded shadow-md w-full max-w-md">
         <h2 className="text-xl font-semibold mb-4">Forgot Password</h2>
         <input
           type="email"
@@ -30,7 +29,7 @@ export default function ForgotPasswordPage() {
           placeholder="Enter your email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border rounded mb-4"
+          className="w-full p-2 border rounded mb-4 text-gray-500"
         />
         <button type="submit" className="w-full bg-blue-600 text-white py-2 rounded">
           Send Reset Link
