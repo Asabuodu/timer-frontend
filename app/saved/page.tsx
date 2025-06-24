@@ -177,7 +177,7 @@ export default function SavedPage() {
                 </li>
               );
             })}
-      <button className="rounded-full float-right mt-2 mb-2 mr-2 border px-4" 
+      <button className="rounded-full float-right mt-2 mb-2 mr-2 border px-4 hover:bg-gray-400  text-gray-600 border-gray-300 shadow-md transition-colors duration-200 ease-in-out" 
       onClick={() => {
         setEditingSchedule(null);
         router.push("/");
