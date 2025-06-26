@@ -6,6 +6,7 @@ import { Bars3Icon, XMarkIcon } from "@heroicons/react/24/outline";
 import { useRouter, usePathname } from "next/navigation";
 import Splash from "./Splash";
 import { useAuthStore } from "../store/authStore";
+import { motion, AnimatePresence } from "framer-motion";
 
 const Navbar = () => {
   const { user, setUser, logout } = useAuthStore();
@@ -56,7 +57,10 @@ const Navbar = () => {
 
   const renderAuthButton = () =>
     user ? (
-      <div className="flex items-center gap-6">
+      <motion.div
+        className="flex items-center gap-6"
+        whileHover={{ scale: 1.05 }}
+      >
         <span className="text-sm font-medium text-black hidden md:inline">
           {user.username || user.email}
         </span>
@@ -66,23 +70,27 @@ const Navbar = () => {
         >
           Logout
         </button>
-      </div>
+      </motion.div>
     ) : (
-      <button
+      <motion.button
+        whileTap={{ scale: 0.95 }}
         onClick={() => handleNavClick("/signin")}
         className="ml-4 text-gray-700 border-2 border-black px-6 py-2 rounded-full text-sm font-mono hover:bg-blue-500 hover:text-white transition"
       >
         Signin
-      </button>
+      </motion.button>
     );
 
   return (
     <>
       <Splash show={showSplash} onClose={() => setShowSplash(false)} />
-      <nav className="w-full px-6 md:px-14 py-4 bg-transparent">
+      <nav className="w-full px-6 md:px-14 py-4 bg-transparent mb-3">
         <div className="flex items-center justify-between md:justify-around">
           {/* Logo */}
-          <div
+          <motion.div
+            initial={{ x: -40, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.4 }}
             className="flex items-center gap-2 cursor-pointer"
             onClick={handleLogoClick}
             onMouseEnter={() => setIsHovered(true)}
@@ -95,14 +103,29 @@ const Navbar = () => {
               height={50}
             />
             <span className="text-3xl md:text-5xl font-light text-black">Simp</span>
-          </div>
+          </motion.div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex gap-10 items-center">
+          <motion.div
+            className="hidden md:flex gap-10 items-center"
+            initial="hidden"
+            animate="visible"
+            variants={{
+              visible: {
+                transition: {
+                  staggerChildren: 0.08,
+                },
+              },
+            }}
+          >
             {navItems.map(({ label, path }) => (
-              <button
+              <motion.button
                 key={label}
                 onClick={() => handleNavClick(path)}
+                variants={{
+                  hidden: { opacity: 0, y: -10 },
+                  visible: { opacity: 1, y: 0 },
+                }}
                 className={`pb-2 text-sm font-medium transition-all ${
                   pathname === path
                     ? "border-b-2 border-black text-black hover:text-amber-500 hover:border-amber-500"
@@ -110,10 +133,10 @@ const Navbar = () => {
                 }`}
               >
                 {label}
-              </button>
+              </motion.button>
             ))}
             {renderAuthButton()}
-          </div>
+          </motion.div>
 
           {/* Mobile Toggle */}
           <button
@@ -121,29 +144,40 @@ const Navbar = () => {
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
-            {isOpen ? <XMarkIcon className="w-6 h-6 text-gray-700" /> : <Bars3Icon className="w-6 h-6 text-gray-700" />}
+            {isOpen ? (
+              <XMarkIcon className="w-6 h-6 text-gray-700" />
+            ) : (
+              <Bars3Icon className="w-6 h-6 text-gray-700" />
+            )}
           </button>
         </div>
 
         {/* Mobile Menu */}
-        {isOpen && (
-          <div className="mt-4 md:hidden flex flex-col gap-4 px-2">
-            {navItems.map(({ label, path }) => (
-              <button
-                key={label}
-                onClick={() => handleNavClick(path)}
-                className={`text-left text-sm font-medium ${
-                  pathname === path
-                    ? "border-b-2 border-black text-black hover:text-amber-500 hover:border-amber-500"
-                    : "text-black hover:text-amber-500"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
-            <div className="mt-2">{renderAuthButton()}</div>
-          </div>
-        )}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="mt-4 md:hidden flex flex-col gap-4 px-2"
+            >
+              {navItems.map(({ label, path }) => (
+                <button
+                  key={label}
+                  onClick={() => handleNavClick(path)}
+                  className={`text-left text-sm font-medium ${
+                    pathname === path
+                      ? "border-b-2 border-black text-black hover:text-amber-500 hover:border-amber-500"
+                      : "text-black hover:text-amber-500"
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+              <div className="mt-2">{renderAuthButton()}</div>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </nav>
     </>
   );

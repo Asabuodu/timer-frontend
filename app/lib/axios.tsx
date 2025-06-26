@@ -24,15 +24,3 @@ if (typeof window !== "undefined") {
 }
 
 export default axiosInstance;
-
-
-
-// lib/axios.ts
-// import axios from "axios";
-
-// const instance = axios.create({
-//   baseURL: "http://localhost:5000/api",
-//   withCredentials: true, // only if using cookie-based auth
-// });
-
-// export default instance;

@@ -1,4 +1,3 @@
-
 "use client";
 
 import {
@@ -9,7 +8,8 @@ import {
 } from "@heroicons/react/24/outline";
 import { CheckIcon, PauseIcon } from "@heroicons/react/24/solid";
 import { useEffect, useRef, useState } from "react";
-import type { Time, Category } from "../lib/types"; // Adjust path if needed
+import { motion, AnimatePresence } from "framer-motion";
+import type { Time, Category } from "../lib/types";
 
 const getTotalSeconds = (time: Time) =>
   time.hours * 3600 + time.minutes * 60 + time.seconds;
@@ -145,7 +145,12 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
   const savedSecs = savedSeconds % 60;
 
   return (
-    <div className="flex flex-col items-center min-h-screen bg-transparent">
+    <motion.div
+      className="flex flex-col items-center min-h-screen bg-transparent"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.5 }}
+    >
       <p
         className={`text-2xl mt-28 w-40 h-10 flex justify-center items-center rounded-full
           ${allPercentage > 80 ? "bg-red-500 text-white" : "bg-black text-white"}`}
@@ -154,10 +159,8 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
       </p>
 
       <div className="w-full max-w-4xl border-8 mt-16 border-white p-6 rounded-2xl shadow-md">
-        {/* Top Control Bar */}
         <div className="flex justify-between">
           <button
-            aria-label="Previous Category"
             disabled={currentIndex === 0}
             onClick={() => {
               const newIndex = Math.max(0, currentIndex - 1);
@@ -179,7 +182,6 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
           </p>
 
           <button
-            aria-label="Next Category"
             disabled={currentIndex === categories.length - 1}
             onClick={() => {
               const newIndex = Math.min(categories.length - 1, currentIndex + 1);
@@ -197,11 +199,10 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
           </button>
         </div>
 
-        {/* Circular Timer */}
         <div className="w-[260px] h-[260px] relative mt-14 mx-auto">
           <svg className="w-full h-full transform" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="47" stroke="#eee" strokeWidth="4" fill="none" />
-            <circle
+            <motion.circle
               cx="50"
               cy="50"
               r="47"
@@ -211,68 +212,79 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
               strokeDasharray="282.74"
               strokeDashoffset={(282.74 * percentage) / 100}
               strokeLinecap="round"
+              initial={{ strokeDashoffset: 282.74 }}
+              animate={{ strokeDashoffset: (282.74 * percentage) / 100 }}
+              transition={{ duration: 0.3 }}
             />
           </svg>
 
-          <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-            {isCompleted ? (
-              <p className="text-xl font-bold text-black">
-                <CheckIcon className="text-black text-6xl fill-black" /> Completed
-              </p>
-            ) : showSavedTime ? (
-              <p className="text-xl text-black font-mono">
-                {savedHrs > 0 ? `${savedHrs}hr ` : ""}
-                {savedMins > 0 ? `${savedMins}min ` : ""}
-                {savedSecs > 0 ? `${savedSecs}sec` : ""}
-                <br />
-                saved
-              </p>
-            ) : (
+          <motion.div
+            className="absolute inset-0 flex flex-col items-center justify-center text-center"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.4 }}
+          >
+            <AnimatePresence>
+              {isCompleted && (
+                <motion.div
+                  key="completed"
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  exit={{ scale: 0.8, opacity: 0 }}
+                  className="text-xl font-bold text-black flex flex-col items-center"
+                >
+                  <CheckIcon className="text-black text-6xl fill-black" />
+                  Completed
+                </motion.div>
+              )}
+            </AnimatePresence>
+
+            {!isCompleted && !showSavedTime && (
               <>
-                <p className={`text-4xl font-mono ${percentage > 80 ? "text-red-500" : "text-black"}`}>
+                <motion.p
+                  className={`text-4xl font-mono ${percentage > 80 ? "text-red-500" : "text-black"}`}
+                  key="countdown"
+                  initial={{ scale: 0.9, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ duration: 0.2 }}
+                >
                   {format(hrs)} : {format(mins)} : {format(secs)}
-                </p>
+                </motion.p>
                 <p className="text-lg text-gray-500">hrs &nbsp;&nbsp; mins &nbsp;&nbsp; secs</p>
               </>
             )}
-          </div>
+          </motion.div>
 
-          {/* Timer Controls */}
           <div className="flex gap-6 mt-6 justify-around items-center text-gray-200 text-5xl">
             {isRunning ? (
               <PauseIcon
-                aria-label="Pause Timer"
                 onClick={() => setIsRunning(false)}
                 className="w-9 cursor-pointer fill-gray-300 hover:fill-blue-500"
               />
             ) : (
               <PlayIcon
-                aria-label="Play Timer"
                 onClick={() => setIsRunning(true)}
                 className="w-9 cursor-pointer fill-gray-300 hover:fill-green-500"
               />
             )}
             <StopIcon
-              aria-label="Reset Timer"
               onClick={reset}
               className="w-9 cursor-pointer fill-gray-300 hover:fill-red-500"
             />
           </div>
         </div> <br />
 
-        {/* Progress Bar */}
-        <div className="w-full bg-gray-200 rounded-full h-2 mt-18">
-          <div
-            className={`h-2 rounded-full transition-all duration-300 ${
+        <div className="w-full bg-gray-200 rounded-full h-2 mt-18 overflow-hidden">
+          <motion.div
+            className={`h-2 rounded-full ${
               allPercentage > 80 ? "bg-red-500" : "bg-black"
             }`}
-            style={{ width: `${allPercentage}%` }}
+            initial={{ width: 0 }}
+            animate={{ width: `${allPercentage}%` }}
+            transition={{ duration: 0.3 }}
           />
         </div>
 
-        {/* <hr className="text-gray-400 border rounded w-full mt-6" /> */}
-
-        {/* Start/Finish Buttons */}
         <div className="flex justify-center space-x-10 mt-6">
           <button onClick={() => setIsRunning(true)} className="px-4 py-2 text-gray-500 hover:text-gray-700">
             Start
@@ -282,7 +294,7 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
           </button>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
