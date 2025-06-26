@@ -52,7 +52,7 @@ const Navbar = () => {
     logout();
     localStorage.removeItem("authToken");
     localStorage.removeItem("authUser");
-    router.push("/signin");
+    router.push("/");
   };
 
   const renderAuthButton = () =>

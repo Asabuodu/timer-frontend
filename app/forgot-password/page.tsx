@@ -16,6 +16,7 @@ export default function ForgotPasswordPage() {
       await axios.post("/auth/forgot-password", { email });
       setMessage("🔐 A token has been sent to your email.");
       setEmail("");
+      router.push("/verify-token");
     } catch (err: any) {
       setMessage(err?.response?.data?.message || "❌ Something went wrong.");
     }
