@@ -36,7 +36,7 @@ export default function SigninPage() {
       localStorage.setItem("authUser", JSON.stringify(user));
 
       // ✅ Redirect on success
-      router.push("/");
+      router.push("/home");
     } catch (err: unknown) {
       type AxiosError = {
         response?: {

@@ -17,14 +17,13 @@ const Navbar = () => {
   const [disableSplash, setDisableSplash] = useState(false);
 
   const navItems = [
-    { label: "Make Schedule", path: "/" },
+    { label: "Make Schedule", path: "/home" },
     { label: "Ongoing Schedule", path: "/ongoing" },
     { label: "Saved Schedule", path: "/saved" },
     { label: "Setting", path: "/settings" },
     { label: "Help", path: "/help" },
   ];
 
-  // Sync Zustand user with localStorage (on page reload)
   useEffect(() => {
     const userData = localStorage.getItem("authUser");
     if (userData) {
@@ -52,14 +51,14 @@ const Navbar = () => {
     logout();
     localStorage.removeItem("authToken");
     localStorage.removeItem("authUser");
-    router.push("/");
+    router.push("/home");
   };
 
   const renderAuthButton = () =>
     user ? (
       <div className="flex items-center gap-6">
         <span className="text-sm font-medium text-black hidden md:inline">
-           {user.username || user.email}
+          {user.username || user.email}
         </span>
         <button
           onClick={handleLogout}
@@ -70,10 +69,10 @@ const Navbar = () => {
       </div>
     ) : (
       <button
-        onClick={() => handleNavClick("/signup")}
+        onClick={() => handleNavClick("/signin")}
         className="ml-4 text-gray-700 border-2 border-black px-6 py-2 rounded-full text-sm font-mono hover:bg-blue-500 hover:text-white transition"
       >
-        Sign Up
+        Signin
       </button>
     );
 
@@ -81,7 +80,7 @@ const Navbar = () => {
     <>
       <Splash show={showSplash} onClose={() => setShowSplash(false)} />
       <nav className="w-full px-6 md:px-14 py-4 bg-transparent">
-        <div className="flex items-center justify-around hover:border-black">
+        <div className="flex items-center justify-between md:justify-around">
           {/* Logo */}
           <div
             className="flex items-center gap-2 cursor-pointer"
@@ -95,11 +94,11 @@ const Navbar = () => {
               width={50}
               height={50}
             />
-            <span className="text-3xl md:text-5xl font-bold text-black">Simp</span>
+            <span className="text-3xl md:text-5xl font-light text-black">Simp</span>
           </div>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex gap-10 justify-around items-center">
+          <div className="hidden md:flex gap-10 items-center">
             {navItems.map(({ label, path }) => (
               <button
                 key={label}
@@ -122,13 +121,13 @@ const Navbar = () => {
             onClick={() => setIsOpen(!isOpen)}
             aria-label="Toggle menu"
           >
-            {isOpen ? <XMarkIcon className="w-6 h-6" /> : <Bars3Icon className="w-6 h-6" />}
+            {isOpen ? <XMarkIcon className="w-6 h-6 text-gray-700" /> : <Bars3Icon className="w-6 h-6 text-gray-700" />}
           </button>
         </div>
 
         {/* Mobile Menu */}
         {isOpen && (
-          <div className="mt-4 flex flex-col md:hidden gap-4">
+          <div className="mt-4 md:hidden flex flex-col gap-4 px-2">
             {navItems.map(({ label, path }) => (
               <button
                 key={label}
@@ -142,7 +141,7 @@ const Navbar = () => {
                 {label}
               </button>
             ))}
-            {renderAuthButton()}
+            <div className="mt-2">{renderAuthButton()}</div>
           </div>
         )}
       </nav>

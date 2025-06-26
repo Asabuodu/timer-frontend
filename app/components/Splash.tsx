@@ -25,7 +25,7 @@ const Splash = ({ show, onClose }: SplashProps) => {
 
   return (
     <div
-      className={`fixed inset-0 z-50 flex items-center justify-center bg-conic-180 from-indigo-600 via-indigo-50 to-indigo-600 transition-opacity duration-500 ${
+      className={`fixed inset-0 z-50 flex items-center justify-center  bg-white bg-linear-to-r/srgb from-white via-blue-200 to-white-100 to-90%  ${
         visible ? "opacity-100" : "opacity-0 pointer-events-none"
       }`}
     >
@@ -35,9 +35,9 @@ const Splash = ({ show, onClose }: SplashProps) => {
         }`}
       >
         <div className="text-6xl md:text-8xl items-center w-40 mb-4 mx-auto text-amber-500 font-bold">
-          <Image src="/vector.png" alt="logo" width={120} height={120}/>
+          <Image src="/vector.png" alt="logo" width={120} height={120} className="mx-auto"/>
         </div>
-        <h1 className="text-5xl md:text-5xl font-hover font-bold text-black">SIMP</h1>
+        <h1 className="text-5xl md:text-5xl font-hover font-bold text-black mt-2 mb-10">SIMP</h1>
         <p className="mt-4 text-gray-600 text-lg md:text-xl font-medium">
           Your personal time schedule <br /> Any Where,  Any Time.
         </p>
