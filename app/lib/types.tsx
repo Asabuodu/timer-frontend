@@ -11,6 +11,7 @@ export type Category = {
 };
 
 export type Schedule = {
+   _id?: string; 
   id: string;
   title: string;
   duration: Time;

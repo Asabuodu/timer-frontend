@@ -1,8 +1,10 @@
 
+
 "use client";
 
 import { useState } from "react";
 import axios from "@/app/lib/axios";
+import { isAxiosError } from "axios";
 import { useRouter } from "next/navigation";
 
 export default function ForgotPasswordPage() {
@@ -17,15 +19,22 @@ export default function ForgotPasswordPage() {
       setMessage("🔐 A token has been sent to your email.");
       setEmail("");
       router.push("/verify-token");
-    } catch (err: any) {
-      setMessage(err?.response?.data?.message || "❌ Something went wrong.");
+    } catch (err: unknown) {
+      if (isAxiosError(err)) {
+        setMessage(err.response?.data?.message || "❌ Something went wrong.");
+      } else {
+        setMessage("❌ Something went wrong.");
+      }
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-white via-blue-100 to-white p-4">
       <h1 className="text-2xl font-bold mb-4 text-gray-600">Forgot Password</h1>
-      <form onSubmit={handleSubmit} className="bg-transparent shadow p-6 rounded-xl border-2 border-white space-y-4 max-w-md w-full">
+      <form
+        onSubmit={handleSubmit}
+        className="bg-transparent shadow p-6 rounded-xl border-2 border-white space-y-4 max-w-md w-full"
+      >
         <input
           type="email"
           placeholder="Enter your email"
@@ -39,7 +48,10 @@ export default function ForgotPasswordPage() {
         </button>
         {message && <p className="text-center text-sm text-gray-700">{message}</p>}
         <p className="mt-4 text-center text-sm text-gray-400">
-          Remembered your password? <a href="/signin" className="text-blue-600 hover:underline">Login</a>  
+          Remembered your password?{" "}
+          <a href="/signin" className="text-blue-600 hover:underline">
+            Login
+          </a>
         </p>
       </form>
     </div>

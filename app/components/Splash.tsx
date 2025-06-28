@@ -14,7 +14,7 @@ const Splash = ({ show, onClose }: SplashProps) => {
   useEffect(() => {
     if (show) {
       setVisible(true);
-      const timer = setTimeout(() => {
+      setTimeout(() => {
         setVisible(false);
         setTimeout(() => {
           onClose();

@@ -15,7 +15,7 @@ type ScheduleStore = {
   clearEditingSchedule: () => void;
 };
 
-export const useScheduleStore = create<ScheduleStore>((set, get) => ({
+export const useScheduleStore = create<ScheduleStore>((set) => ({
   categories: [],
   savedSchedules: [],
   editingSchedule: null,

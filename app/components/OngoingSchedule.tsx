@@ -30,7 +30,7 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
   const [isRunning, setIsRunning] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
   const [showSavedTime, setShowSavedTime] = useState(false);
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+  const [, setElapsedSeconds] = useState(0);
   const [completedCategories, setCompletedCategories] = useState<Record<number, boolean>>({});
   const [savedTimes, setSavedTimes] = useState<Record<number, number>>({});
 
@@ -138,11 +138,11 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
   const mainMins = Math.floor((totalTimeLeft % 3600) / 60);
   const mainSecs = totalTimeLeft % 60;
 
-  const totalScheduledSeconds = getTotalTimeOfAllCategories(categories);
-  const savedSeconds = Math.max(0, totalScheduledSeconds - elapsedSeconds);
-  const savedHrs = Math.floor(savedSeconds / 3600);
-  const savedMins = Math.floor((savedSeconds % 3600) / 60);
-  const savedSecs = savedSeconds % 60;
+  // const totalScheduledSeconds = getTotalTimeOfAllCategories(categories);
+  // const savedSeconds = Math.max(0, totalScheduledSeconds - elapsedSeconds);
+  // const savedHrs = Math.floor(savedSeconds / 3600);
+  // const savedMins = Math.floor((savedSeconds % 3600) / 60);
+  // const savedSecs = savedSeconds % 60;
 
   return (
     <motion.div
@@ -224,7 +224,7 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
           >
-            <AnimatePresence>
+            {/* <AnimatePresence>
               {isCompleted && (
                 <motion.div
                   key="completed"
@@ -240,7 +240,41 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
                 
 
               )}
-            </AnimatePresence>
+            </AnimatePresence> */}
+
+            <AnimatePresence>
+            {isCompleted && (
+              <motion.div
+                key="completed"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.8, opacity: 0 }}
+                className="text-xl font-bold text-black flex flex-col items-center"
+              >
+                <CheckIcon className="text-black text-6xl fill-black" />
+                Completed
+              </motion.div>
+            )}
+
+          {showSavedTime && savedTimes[currentIndex] !== undefined && (
+            <motion.div
+              key="saved-time"
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              className="text-center text-lg mt-2 text-gray-600 font-semibold flex flex-col items-center"
+            >
+              time Saved  <span className="font-bold"></span>
+              <span className="mt-1 text-2xl">
+                {format(Math.floor(savedTimes[currentIndex]! / 3600))}:
+                {format(Math.floor((savedTimes[currentIndex]! % 3600) / 60))}:
+                {format(savedTimes[currentIndex]! % 60)}
+              </span>
+            </motion.div>
+          )}
+
+          </AnimatePresence>
+
 
             {!isCompleted && !showSavedTime && (
               <>
