@@ -20,7 +20,7 @@ const StartPage = () => {
                     <Image src="/vector.png" alt="logo" width={120} height={120} className="mx-auto mb-2"/>
                 </div>
 
-                <h1 className="text-5xl md:text-5xl font-bold text-black">SIMP</h1>
+                <h1 className="text-5xl md:text-5xl font-light text-black">Simp</h1>
                 
                 <p className="mt-10 text-gray-600 text-md md:text-xl font-medium text-center">
                     Your personal time schedule <br /> Any Where,  Any Time.

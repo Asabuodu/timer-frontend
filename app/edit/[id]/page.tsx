@@ -1,4 +1,3 @@
-
 "use client";
 import { AnimatePresence, motion } from "framer-motion";
 import { useState, useEffect } from "react";
@@ -199,25 +198,6 @@ const EditSchedule = () => {
                     + Add Category
                   </button>
                 </div>
-
-                {/* <div className="flex flex-col sm:flex-row justify-center gap-6 mt-8">
-                  <button
-                    className="bg-black text-white px-6 py-2 rounded-full w-full sm:w-40"
-                    onClick={() => {
-                      updateZustandCategories(categories);
-                      setStarted(true);
-                    }}
-                  >
-                    Start
-                  </button>
-
-                  <button
-                    className="border border-black px-6 py-2 rounded-full w-full sm:w-40 text-black"
-                    onClick={handleSave}
-                  >
-                    Save
-                  </button>
-                </div> */}
 
                 <div className="flex flex-col sm:flex-row gap-4 mt-8 justify-center">
             <button

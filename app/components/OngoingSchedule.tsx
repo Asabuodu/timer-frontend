@@ -236,6 +236,9 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
                   <CheckIcon className="text-black text-6xl fill-black" />
                   Completed
                 </motion.div>
+
+                
+
               )}
             </AnimatePresence>
 
@@ -249,8 +252,9 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
                   transition={{ duration: 0.2 }}
                 >
                   {format(hrs)} : {format(mins)} : {format(secs)}
+                  
+                  <p className="text-lg text-gray-500">hr &nbsp;&nbsp; mins &nbsp;&nbsp; secs</p>
                 </motion.p>
-                <p className="text-lg text-gray-500">hrs &nbsp;&nbsp; mins &nbsp;&nbsp; secs</p>
               </>
             )}
           </motion.div>

@@ -37,7 +37,7 @@ const Splash = ({ show, onClose }: SplashProps) => {
         <div className="text-6xl md:text-8xl items-center w-40 mb-4 mx-auto text-amber-500 font-bold">
           <Image src="/vector.png" alt="logo" width={120} height={120} className="mx-auto"/>
         </div>
-        <h1 className="text-5xl md:text-5xl font-hover font-bold text-black mt-2 mb-10">SIMP</h1>
+        <h1 className="text-5xl md:text-5xl font-hover font-light text-black mt-2 mb-10">Simp</h1>
         <p className="mt-4 text-gray-600 text-lg md:text-xl font-medium">
           Your personal time schedule <br /> Any Where,  Any Time.
         </p>
