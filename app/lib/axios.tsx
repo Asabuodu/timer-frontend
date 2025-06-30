@@ -3,7 +3,7 @@ import axios from "axios";
 
 const axiosInstance = axios.create({
   // baseURL: "http://localhost:5000/api",
-  baseURL: " https://timer-backend-cc4x.onrender.com/api",
+  baseURL: " https://timer-backend-36a7.onrender.com/api",
   headers: {
     "Content-Type": "application/json",
   },
