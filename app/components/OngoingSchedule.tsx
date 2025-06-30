@@ -224,23 +224,6 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4 }}
           >
-            {/* <AnimatePresence>
-              {isCompleted && (
-                <motion.div
-                  key="completed"
-                  initial={{ scale: 0, opacity: 0 }}
-                  animate={{ scale: 1, opacity: 1 }}
-                  exit={{ scale: 0.8, opacity: 0 }}
-                  className="text-xl font-bold text-black flex flex-col items-center"
-                >
-                  <CheckIcon className="text-black text-6xl fill-black" />
-                  Completed
-                </motion.div>
-
-                
-
-              )}
-            </AnimatePresence> */}
 
             <AnimatePresence>
             {isCompleted && (
