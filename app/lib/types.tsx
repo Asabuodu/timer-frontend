@@ -7,15 +7,23 @@ export type Time = {
 export type Category = {
   id: string;
   name: string;
-  duration: Time;
+  duration: {
+    hours: number;
+    minutes: number;
+    seconds: number;
+  };
 };
 
 export type Schedule = {
-   _id?: string; 
-  id: string;
+  _id: string;
+  id: string; // For compatibility with Zustand store
   title: string;
-  duration: Time;
   categories: Category[];
+  duration: {
+    hours: number;
+    minutes: number;
+    seconds: number;
+  };
   createdAt: string;
-  updatedAt?: string;
+  updatedAt: string;
 };

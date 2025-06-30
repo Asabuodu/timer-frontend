@@ -1,7 +1,11 @@
+
+
+
 "use client";
 
 import { useState } from "react";
 import axios from "@/app/lib/axios";
+import { default as axiosLib } from "axios";
 import { useRouter } from "next/navigation";
 
 export default function VerifyTokenPage() {
@@ -14,17 +18,21 @@ export default function VerifyTokenPage() {
     e.preventDefault();
     try {
       const res = await axios.post("/auth/verify-token", { email, token });
-      localStorage.setItem("resetToken", res.data.token); // Save token temporarily
+      localStorage.setItem("resetToken", res.data.token);
       router.push("/reset-password");
-    } catch (err: any) {
-      setError(err?.response?.data?.message || "❌ Invalid token.");
+    } catch (err: unknown) {
+      if (axiosLib.isAxiosError(err) && err.response?.data?.message) {
+        setError(err.response.data.message);
+      } else {
+        setError("❌ Invalid token.");
+      }
     }
   };
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-r from-white via-blue-100 to-white p-4">
       <h1 className="text-2xl font-bold mb-4 text-gray-500">Verify Token</h1>
-      <form onSubmit={handleSubmit} className="bg-transparent border-2 border-white  text-gray-500 shadow p-6 rounded-xl space-y-4 max-w-md w-full">
+      <form onSubmit={handleSubmit} className="bg-transparent border-2 border-white text-gray-500 shadow p-6 rounded-xl space-y-4 max-w-md w-full">
         <input
           type="email"
           placeholder="Email"
@@ -46,10 +54,9 @@ export default function VerifyTokenPage() {
         </button>
         {error && <p className="text-center text-sm text-red-600">{error}</p>}
         <p className="mt-4 text-center text-sm text-gray-400">
-          Didn&#39;t receive a token? <a href="/forgot-password" className="text-blue-600 hover:underline">Request a new one</a>    
+          Didn&#39;t receive a token? <a href="/forgot-password" className="text-blue-600 hover:underline">Request a new one</a>
         </p>
       </form>
     </div>
   );
 }
-

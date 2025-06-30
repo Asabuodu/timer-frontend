@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import axios from "../lib/axios";
+import { Schedule, Category  } from "../lib/types";
 import Navbar from "../components/navbar";
 import ConfirmModal from "../components/ConfirmModal";
 import { ChevronDownIcon } from "@heroicons/react/24/outline";
@@ -10,7 +11,9 @@ import { useScheduleStore } from "@/app/lib/scheduleStore";
 import { AnimatePresence, motion } from "framer-motion";
 
 export default function SavedPage() {
-  const [schedules, setSchedules] = useState<any[]>([]);
+  // const [schedules, setSchedules] = useState<any[]>([]);
+  const [schedules, setSchedules] = useState<Schedule[]>([]);
+
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedScheduleId, setSelectedScheduleId] = useState<string | null>(null);
   const [expandedScheduleId, setExpandedScheduleId] = useState<string | null>(null);
@@ -143,7 +146,7 @@ export default function SavedPage() {
                           transition={{ duration: 0.3 }}
                           className="mt-4 space-y-2"
                         >
-                          {schedule.categories.map((cat: any) => (
+                          {schedule.categories.map((cat: Category) => (
                             <div key={cat.id}>
                               • {cat.name} – {String(cat.duration.hours).padStart(2, "0")}:
                               {String(cat.duration.minutes).padStart(2, "0")}:
