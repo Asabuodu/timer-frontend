@@ -11,7 +11,7 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Simple Timer App",
+  title: "Simp",
   description: "A simple timer app that helps you manage your event and save time",
 };
 
