@@ -11,8 +11,8 @@ const roboto = Roboto({
 });
 
 export const metadata: Metadata = {
-  title: "Timer App",
-  description: "A simple timer app built with Next.js",
+  title: "Simple Timer App",
+  description: "A simple timer app that helps you manage your event and save time",
 };
 
 export default function RootLayout({
