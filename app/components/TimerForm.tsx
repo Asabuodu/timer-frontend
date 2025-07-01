@@ -123,7 +123,7 @@ const TimerForm = () => {
 
   const token = localStorage.getItem("authToken");
   if (!token) {
-    setAuthError("You need to sign in before you can save a schedule.");
+    setAuthError("You need to signin before you can save a schedule.");
     return;
   }
 

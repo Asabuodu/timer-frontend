@@ -75,7 +75,7 @@ const Navbar = () => {
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={() => handleNavClick("/signin")}
-        className="ml-4 text-gray-700 border-2 border-black px-6 py-2 rounded-full text-sm font-mono hover:bg-blue-500 hover:text-white transition"
+        className="ml-4 text-gray-700 border-2 border-black px-6 py-2 rounded-full text-sm font-mono hover:bg-gray-500 hover:text-white transition"
       >
         Signin
       </motion.button>

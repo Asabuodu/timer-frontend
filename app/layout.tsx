@@ -12,7 +12,7 @@ const roboto = Roboto({
 
 export const metadata: Metadata = {
   title: "Simp",
-  description: "A simple timer app that helps you manage your event and save time",
+  description: "A simple and intuitive timer app to help you manage your time effectively.",
 };
 
 export default function RootLayout({

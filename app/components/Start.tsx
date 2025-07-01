@@ -40,7 +40,7 @@ const StartPage = () => {
                 () => {
                     window.location.href = "/signup";
                 }
-            } className="bg-gray-400 text-white px-6 py-3 rounded-full mt-2 hover:bg-gray-700 transition-all duration-300 font-semibold" style={{ fontSize: "1.2rem" }
+            } className="bg-gray-500 text-white px-10 py-3 rounded-full mt-2 hover:bg-gray-700 transition-all duration-300 font-semibold" style={{ fontSize: "1.2rem" }
             }>Signup</button>
 
             </div>
