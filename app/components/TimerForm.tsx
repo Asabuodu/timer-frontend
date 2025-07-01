@@ -29,6 +29,9 @@ const TimerForm = () => {
   const editingSchedule = useScheduleStore((state) => state.editingSchedule);
   const router = useRouter();
 
+  const [authError, setAuthError] = useState("");
+
+
   useEffect(() => {
     if (editingSchedule) {
       setTitle(editingSchedule.title);
@@ -78,40 +81,79 @@ const TimerForm = () => {
     return true;
   };
 
+  // const handleSave = async () => {
+  //   if (!validateForm()) return;
+
+  //   const token = localStorage.getItem("authToken");
+  //   if (!token) {
+  //     alert("⚠️ You must be logged in to save a schedule.");
+  //     return;
+  //   }
+
+  //   const schedule = {
+  //     title,
+  //     categories,
+  //     duration,
+  //     createdAt: new Date().toISOString(),
+  //   };
+
+  //   try {
+  //     const res = await axios.post("/schedules", schedule, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+
+  //     if (res.status === 201 || res.status === 200) {
+  //       alert("✅ Schedule saved successfully!");
+  //       router.push("/saved");
+  //     } else {
+  //       alert("⚠️ Failed to save schedule");
+  //     }
+  //   } catch (error) {
+  //     console.error("❌ Error saving schedule:", error);
+  //     alert("An error occurred while saving schedule.");
+  //   }
+  // };
+
   const handleSave = async () => {
-    if (!validateForm()) return;
+  setAuthError(""); // Clear any previous error
 
-    const token = localStorage.getItem("authToken");
-    if (!token) {
-      alert("⚠️ You must be logged in to save a schedule.");
-      return;
-    }
+  if (!validateForm()) return;
 
-    const schedule = {
-      title,
-      categories,
-      duration,
-      createdAt: new Date().toISOString(),
-    };
+  const token = localStorage.getItem("authToken");
+  if (!token) {
+    setAuthError("You need to sign in before you can save a schedule.");
+    return;
+  }
 
-    try {
-      const res = await axios.post("/schedules", schedule, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-
-      if (res.status === 201 || res.status === 200) {
-        alert("✅ Schedule saved successfully!");
-        router.push("/saved");
-      } else {
-        alert("⚠️ Failed to save schedule");
-      }
-    } catch (error) {
-      console.error("❌ Error saving schedule:", error);
-      alert("An error occurred while saving schedule.");
-    }
+  // proceed to save
+  const schedule = {
+    title,
+    categories,
+    duration,
+    createdAt: new Date().toISOString(),
   };
+
+  try {
+    const res = await axios.post("/schedules", schedule, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (res.status === 201 || res.status === 200) {
+      alert("✅ Schedule saved successfully!");
+      router.push("/saved");
+    } else {
+      alert("⚠️ Failed to save schedule");
+    }
+  } catch (error) {
+    console.error("❌ Error saving schedule:", error);
+    alert("An error occurred while saving schedule.");
+  }
+};
+
 
   const handleStart = () => {
     if (!validateForm()) return;
@@ -145,7 +187,7 @@ const TimerForm = () => {
               <input
                 className="w-full mt-4 p-3 border text-gray-500 border-gray-500 rounded-lg"
                 placeholder="e.g., Church Program"
-                maxLength={50}
+                maxLength={20}
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
               />
@@ -212,8 +254,13 @@ const TimerForm = () => {
               className="border border-black px-6 py-2 rounded-full text-black hover:bg-black hover:text-white"
             >
               Save
-            </button>
+            </button> 
+        
+
           </div>
+              {authError && (
+          <p className="text-center text-sm text-red-400 mt-8">{authError}</p>
+        )}
         </motion.div>
       </div>
     </motion.div>
