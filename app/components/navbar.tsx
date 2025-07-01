@@ -84,7 +84,7 @@ const Navbar = () => {
   return (
     <>
       <Splash show={showSplash} onClose={() => setShowSplash(false)} />
-      <nav className="w-full px-6 md:px-14 py-4 bg-transparent mb-3">
+      <nav className="w-full px-6 md:px-14 py-4 bg-transparent mb-8">
         <div className="flex items-center justify-between md:justify-around">
           {/* Logo */}
           <motion.div
