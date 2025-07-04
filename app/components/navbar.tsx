@@ -75,7 +75,7 @@ const Navbar = () => {
       <motion.button
         whileTap={{ scale: 0.95 }}
         onClick={() => handleNavClick("/signin")}
-        className="ml-4 text-gray-700 border-2 border-black px-6 py-2 rounded-full text-sm font-mono hover:bg-gray-500 hover:text-white transition"
+        className="ml-4 text-gray-700 border-2 border-gray-500 px-6 py-2 rounded-full text-sm font-mono hover:bg-gray-500 hover:text-white transition"
       >
         Signin
       </motion.button>
@@ -101,6 +101,7 @@ const Navbar = () => {
               alt="Logo"
               width={50}
               height={50}
+              className="md:hidden w-10 h-10 md:w-12 md:h-12 transition-transform duration-300"
             />
             <span className="text-3xl md:text-5xl font-light text-black">Simp</span>
           </motion.div>

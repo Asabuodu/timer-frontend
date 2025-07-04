@@ -1,6 +1,8 @@
 "use client";
 
 import {
+  ArrowsPointingInIcon,
+  ArrowsPointingOutIcon,
   ChevronLeftIcon,
   ChevronRightIcon,
   PlayIcon,
@@ -33,7 +35,9 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
   const [, setElapsedSeconds] = useState(0);
   const [completedCategories, setCompletedCategories] = useState<Record<number, boolean>>({});
   const [savedTimes, setSavedTimes] = useState<Record<number, number>>({});
+  const [isFullScreen, setIsFullScreen] = useState(false);
 
+  const cardRef = useRef<HTMLDivElement>(null);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const currentCategory = categories[currentIndex] || {
@@ -130,6 +134,19 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
     }, 2000);
   };
 
+  const toggleFullScreen = async () => {
+    if (!document.fullscreenElement && cardRef.current) {
+      await cardRef.current.requestFullscreen();
+      setIsFullScreen(true);
+    } else if (document.fullscreenElement) {
+      await document.exitFullscreen();
+      setIsFullScreen(false);
+    }
+  };
+
+
+
+
   const hrs = Math.floor(secondsLeft / 3600);
   const mins = Math.floor((secondsLeft % 3600) / 60);
   const secs = secondsLeft % 60;
@@ -137,12 +154,6 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
   const mainHrs = Math.floor(totalTimeLeft / 3600);
   const mainMins = Math.floor((totalTimeLeft % 3600) / 60);
   const mainSecs = totalTimeLeft % 60;
-
-  // const totalScheduledSeconds = getTotalTimeOfAllCategories(categories);
-  // const savedSeconds = Math.max(0, totalScheduledSeconds - elapsedSeconds);
-  // const savedHrs = Math.floor(savedSeconds / 3600);
-  // const savedMins = Math.floor((savedSeconds % 3600) / 60);
-  // const savedSecs = savedSeconds % 60;
 
   return (
     <motion.div
@@ -152,14 +163,24 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
       transition={{ duration: 0.5 }}
     >
       <p
-        className={`text-2xl mt-28 w-40 h-10 flex justify-center items-center rounded-full
-          ${allPercentage > 80 ? "bg-red-500 text-white" : "bg-black text-white"}`}
+        className={`text-2xl mt-28 w-40 h-10 flex justify-center items-center rounded-full ${
+          allPercentage > 80 ? "bg-red-500 text-white" : "bg-black text-white"
+        }`}
       >
         {format(mainHrs)} : {format(mainMins)} : {format(mainSecs)}
       </p>
 
-      <div className="w-full max-w-4xl border-8 mt-16 border-white p-6 rounded-2xl shadow-md">
-        <div className="flex justify-between">
+      <div
+        ref={cardRef}
+        className={`border-8 border-white p-6 bg-transparent rounded-2xl shadow-md transition-all duration-300 ${
+          isFullScreen ? "fixed inset-0 w-screen h-screen z-50 overflow-auto bg-white bg-linear-to-r/srgb from-white via-blue-100 to-white-100 to-90% p-16" : "w-full max-w-4xl mt-16"
+        }`}
+      >
+        {/* ...existing JSX content (buttons, timer circle, play/pause, etc)... */}
+        \
+<div className="flex justify-between mb-6">
+
+        
           <button
             disabled={currentIndex === 0}
             onClick={() => {
@@ -197,9 +218,11 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
           >
             Next <ChevronRightIcon className="w-8 -mt-1" />
           </button>
-        </div>
+              </div>
+        <div className={`${isFullScreen ? "flex flex-col justify-center items-center h-full" : ""}`}>
+          
 
-        <div className="w-[260px] h-[260px] relative mt-14 mx-auto">
+        <div className={`relative mt-14 mx-auto ${isFullScreen ? "w-[400px] h-[400px]" : "w-[260px] h-[260px]"}`}>
           <svg className="w-full h-full transform" viewBox="0 0 100 100">
             <circle cx="50" cy="50" r="47" stroke="#eee" strokeWidth="4" fill="none" />
             <motion.circle
@@ -262,7 +285,7 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
             {!isCompleted && !showSavedTime && (
               <>
                 <motion.p
-                  className={`text-4xl font-mono ${percentage > 80 ? "text-red-500" : "text-black"}`}
+                  className={`${isFullScreen ? "text-6xl" : "text-4xl"} font-mono ${percentage > 80 ? "text-red-500" : "text-black"}`}
                   key="countdown"
                   initial={{ scale: 0.9, opacity: 0 }}
                   animate={{ scale: 1, opacity: 1 }}
@@ -270,7 +293,7 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
                 >
                   {format(hrs)} : {format(mins)} : {format(secs)}
                   
-                  <p className="text-lg text-gray-500">hr &nbsp;&nbsp; mins &nbsp;&nbsp; secs</p>
+                  <p className={`${isFullScreen ? "text-2xl" : "text-lg"} text-gray-500`}>hr &nbsp;&nbsp; mins &nbsp;&nbsp; secs</p>
                 </motion.p>
               </>
             )}
@@ -306,13 +329,37 @@ const OngoingSchedule = ({ categories }: { categories: Category[] }) => {
           />
         </div>
 
+
         <div className="flex justify-center space-x-10 mt-6">
-          <button onClick={() => setIsRunning(true)} className="px-4 py-2 text-gray-500 hover:text-gray-700">
+          <button
+            onClick={() => setIsRunning(true)}
+            className="px-4 py-2 text-gray-500 hover:text-gray-700"
+          >
             Start
           </button>
-          <button onClick={finish} className="px-4 py-2 text-gray-500 hover:text-gray-700">
+          <button
+            onClick={finish}
+            className="px-4 py-2 text-gray-500 hover:text-gray-700"
+          >
             Finish
           </button>
+
+          {/* Show fullscreen toggle only on large (lg) screens and up */}
+<div className="hidden lg:block">
+  {isFullScreen ? (
+    <ArrowsPointingInIcon
+      className="w-7 cursor-pointer text-gray-400 hover:text-gray-600"
+      onClick={toggleFullScreen}
+    />
+  ) : (
+    <ArrowsPointingOutIcon
+      className="w-7 cursor-pointer text-gray-400 hover:text-gray-600"
+      onClick={toggleFullScreen}
+    />
+  )}
+</div>
+
+        </div>
         </div>
       </div>
     </motion.div>
