@@ -25,12 +25,18 @@ export default function RootLayout({
     <html lang="en">
         <head>
         {/* Google AdSense Script */}
-        <Script
+        {/* <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1390038745883140"
           crossOrigin="anonymous"
           strategy="afterInteractive"
-        />
+        /> */}
+        <script 
+        async
+         src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1390038745883140"
+     crossOrigin="anonymous">
+
+     </script>
       </head>
       <body className={`${roboto.variable} font-sans antialiased`}>
         {children}
